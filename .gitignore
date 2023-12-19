@@ -42,3 +42,5 @@ Thumbs.db
 *.tmp
 # Ignore appenv virtual environment folder
 /appenv/
+# Ignore designer shortcut file
+/designer - Shortcut.lnk
