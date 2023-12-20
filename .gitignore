@@ -45,4 +45,4 @@ Thumbs.db
 # Ignore designer shortcut file
 designer - Shortcut.lnk
 
-/__pycache__/
+*__pycache__

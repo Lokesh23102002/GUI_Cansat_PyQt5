@@ -11,6 +11,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from range_slider import Graph
 
+
 class Ui_NEXTJS(object):
     def setupUi(self, NEXTJS):
         NEXTJS.setObjectName("NEXTJS")
