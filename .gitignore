@@ -43,4 +43,6 @@ Thumbs.db
 # Ignore appenv virtual environment folder
 /appenv/
 # Ignore designer shortcut file
-/designer - Shortcut.lnk
+/designer - Shortcut.lnk/
+
+/_pycache__/
