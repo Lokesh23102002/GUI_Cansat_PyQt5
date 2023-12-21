@@ -8,7 +8,7 @@ from matplotlib.animation import FuncAnimation
 import range_slider
 from PyQt5 import QtCore, QtGui, QtWidgets
 class Graph():
-    def __init__(self,main_widget,parent):
+    def __init__(self,main_widget):
         layout = QVBoxLayout(main_widget)
         self.slider = range_slider.RangeSlider(QtCore.Qt.Horizontal)
         self.slider.setMinimumHeight(30)
@@ -20,7 +20,7 @@ class Graph():
         self.slider.sliderMoved.connect(self.update_x_range)
         layout.addWidget(self.slider)
 
-        self.label = QLabel('Selected Range: 0 - 0', parent)
+        self.label = QLabel(f'Selected Range: {self.slider._low} - {self.slider._high}')
         layout.addWidget(self.label)
 
         self.figure, self.ax = Figure([4,9]), None
@@ -31,8 +31,8 @@ class Graph():
         self.y_data = np.sin(self.x_data)
         self.ax = self.figure.add_subplot(1,1,1)
         self.line, = self.ax.plot(self.x_data, self.y_data)
-
-        self.animation = FuncAnimation(self.figure, self.update_plot, interval=10)
+        self.ax.set_xlim(self.slider._low, self.slider._high)
+        self.animation = FuncAnimation(self.figure, self.update_plot, interval=100)
 
     def update_x_range(self):
         min_value = self.slider.low()
