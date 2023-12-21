@@ -9,8 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from range_slider import Graph
-
+from AnimatedGraph import Graph
 
 class Ui_NEXTJS(object):
     def setupUi(self, NEXTJS):
@@ -37,11 +36,7 @@ class Ui_NEXTJS(object):
         self.comboBox = QtWidgets.QComboBox(self.Xbee_controll)
         self.comboBox.setGeometry(QtCore.QRect(150, 30, 91, 31))
         self.comboBox.setObjectName("comboBox")
-        self.comboBox.addItem("")
-        self.comboBox.addItem("")
-        self.comboBox.addItem("")
-        self.comboBox.addItem("")
-        self.comboBox.addItem("")
+
         self.label = QtWidgets.QLabel(self.Xbee_controll)
         self.label.setGeometry(QtCore.QRect(10, 30, 81, 21))
         font = QtGui.QFont()
@@ -102,12 +97,12 @@ class Ui_NEXTJS(object):
         self.verticalLayout = QtWidgets.QVBoxLayout(self.Graphs)
         self.verticalLayout.setObjectName("verticalLayout")
         self.widget = QtWidgets.QWidget(self.Graphs)
-        self.widget.setMinimumSize(QtCore.QSize(701, 20))
+        self.widget.setMinimumSize(QtCore.QSize(701, 80))
         self.widget.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.widget.setObjectName("widget")
         self.verticalLayout.addWidget(self.widget)
         self.widget_2 = QtWidgets.QWidget(self.Graphs)
-        self.widget_2.setMinimumSize(QtCore.QSize(701, 20))
+        self.widget_2.setMinimumSize(QtCore.QSize(701, 80))
         self.widget_2.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.widget_2.setObjectName("widget_2")
         self.verticalLayout.addWidget(self.widget_2)
@@ -144,11 +139,12 @@ class Ui_NEXTJS(object):
         _translate = QtCore.QCoreApplication.translate
         NEXTJS.setWindowTitle(_translate("NEXTJS", "NEXTJS"))
         self.Xbee_controll.setTitle(_translate("NEXTJS", "Xbee controller and opened file"))
-        self.comboBox.setItemText(0, _translate("NEXTJS", "COM1"))
-        self.comboBox.setItemText(1, _translate("NEXTJS", "COM2"))
-        self.comboBox.setItemText(2, _translate("NEXTJS", "COM3"))
-        self.comboBox.setItemText(3, _translate("NEXTJS", "COM4"))
-        self.comboBox.setItemText(4, _translate("NEXTJS", "COM5"))
+        for i in range(10):
+            self.comboBox.addItem("")
+            self.comboBox.setItemText(i, _translate("NEXTJS", "COM"+str(i+1)))
+        self.comboBox.activated[str].connect(self.onChanged)    
+
+
         self.label.setText(_translate("NEXTJS", "PORT :- "))
         self.label_2.setText(_translate("NEXTJS", "BAUD RATE :- "))
         self.Xbee_connections.setTitle(_translate("NEXTJS", "GroupBox"))
@@ -165,7 +161,9 @@ class Ui_NEXTJS(object):
         self.graph = Graph(self.widget,self.Graphs)
         self.graph = Graph(self.widget_2,self.Graphs)
 
-
+    def onChanged(self,text):
+        print(text)
+        
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)

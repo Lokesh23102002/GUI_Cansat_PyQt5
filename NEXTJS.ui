@@ -280,7 +280,7 @@
             <property name="minimumSize">
              <size>
               <width>701</width>
-              <height>20</height>
+              <height>80</height>
              </size>
             </property>
             <property name="layoutDirection">
@@ -293,7 +293,7 @@
             <property name="minimumSize">
              <size>
               <width>701</width>
-              <height>20</height>
+              <height>80</height>
              </size>
             </property>
             <property name="layoutDirection">
