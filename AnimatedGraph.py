@@ -7,6 +7,7 @@ from matplotlib.figure import Figure
 from matplotlib.animation import FuncAnimation
 import range_slider
 from PyQt5 import QtCore, QtGui, QtWidgets
+import pyqtgraph as pg
 class Graph():
     def __init__(self,main_widget):
         layout = QVBoxLayout(main_widget)
@@ -32,7 +33,7 @@ class Graph():
         self.ax = self.figure.add_subplot(1,1,1)
         self.line, = self.ax.plot(self.x_data, self.y_data)
         self.ax.set_xlim(self.slider._low, self.slider._high)
-        self.animation = FuncAnimation(self.figure, self.update_plot, interval=100)
+        self.animation = FuncAnimation(self.figure, self.update_plot, frames=np.linspace(0, 10, 100), interval=100, repeat=True)
 
     def update_x_range(self):
         min_value = self.slider.low()
@@ -48,6 +49,50 @@ class Graph():
         self.line.set_xdata(self.x_data)
         self.line.set_ydata(self.y_data)
         self.canvas.draw()
+
+class QtGraph():
+    def __init__(self,main_widget):
+        layout = QVBoxLayout(main_widget)
+        
+        ### from here we are using pyqtgraph
+        
+        self.GraphWidget = pg.PlotWidget()
+        layout.addWidget(self.GraphWidget)
+        self.GraphWidget.setBackground('w')
+
+        self.x_data = []
+        self.y_data = []
+
+        pen = pg.mkPen(color=(255, 0, 0))
+        self.data_line = self.GraphWidget.plot(self.x_data,self.y_data,pen = pen)
+        self.frame = 0
+        self.timer = QtCore.QTimer()
+        self.timer.setInterval(50)
+        self.timer.timeout.connect(self.update_plot)
+        self.timer.start()
+
+        self.slider = range_slider.RangeSlider(QtCore.Qt.Horizontal)
+        self.slider.setMinimumHeight(30)
+        self.slider.setMinimum(0)
+        self.slider.setMaximum(255)
+        self.slider.setLow(15)
+        self.slider.setHigh(35)
+        self.slider.setTickPosition(QtWidgets.QSlider.TicksBelow)
+        self.slider.sliderMoved.connect(self.update_x_range)
+        layout.addWidget(self.slider)
+        
+        self.label = QLabel(f'Selected Range: {self.slider._low} - {self.slider._high}')
+        layout.addWidget(self.label)
+
+    def update_x_range(self):
+        min_value = self.slider.low()
+        max_value = self.slider.high()
+
+        self.label.setText(f'Selected Range: {min_value} - {max_value}')
+
+    def update_plot(self):
+        # Example animation: sine wave
+        self.data_line.setData(self.x_data,self.y_data)
 
 class AnimatedGraph(QMainWindow):
     def __init__(self):
@@ -69,3 +114,4 @@ if __name__ == '__main__':
     window.show()
 
     sys.exit(app.exec_())
+
