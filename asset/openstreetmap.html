@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenStreetMap Example</title>
+    <!-- Include Leaflet from CDN without integrity attribute -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+</head>
+
+<body>
+    <div id="map" style="height: 400px;"></div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="qrc:///qtwebchannel/qwebchannel.js"></script> <!-- Include QtWebChannel.js -->
+
+    <script>
+        var updateMarker;
+        var marker;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var map = L.map('map').setView([0, 0], 2);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            marker = L.marker([0, 0]).addTo(map);
+
+            ;
+        });
+
+        updateMarker = function (lat, lon) {
+            marker.setLatLng([lat, lon]).update();
+
+        }
+    </script>
+</body>
+
+</html>

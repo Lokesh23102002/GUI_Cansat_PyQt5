@@ -40,6 +40,9 @@ class LiveDataReader(QThread):
             
         
 
+    def connect(self,port,baud_rate):
+        self.device = XBeeDevice(port,baud_rate)
+        self.device.add_data_received_callback(self.recieve)
         
     def recieve(self,xbee_message):
         self.data_updated.emit(xbee_message.data.decode("utf8"))
@@ -52,7 +55,7 @@ class LiveDataReader(QThread):
             
             def random_sleep():
             
-                time.sleep(0.5)  # Convert milliseconds to seconds
+                time.sleep(0.2)  # Convert milliseconds to seconds
                 # Or you can use time.sleep(sleep_time / 1000.0) for floating-point division
 
             random_sleep()

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>OSM Map</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://www.openlayers.org/en/v4.6.5/build/ol.js"></script>
+</head>
+
+<body>
+    <div id="map" style="width:100%; height:100%;"></div>
+    <script>
+        var map = new ol.Map({
+            target: 'map',
+            layers: [
+                new ol.layer.Tile({
+                    source: new ol.source.OSM()
+                })
+            ],
+            view: new ol.View({
+                center: ol.proj.fromLonLat([0, 0]),
+                zoom: 2
+            })
+        });
+
+        var marker = new ol.Overlay({
+            position: ol.proj.fromLonLat([0, 0]),
+            positioning: 'center-center',
+            element: document.getElementById('marker'),
+            stopEvent: false
+        });
+
+        map.addOverlay(marker);
+
+        function updateMarker(latitude, longitude) {
+            var position = ol.proj.fromLonLat([longitude, latitude]);
+            marker.setPosition(position);
+            map.getView().setCenter(position);
+        }
+    </script>
+    <div id="marker" style="width: 20px; height: 20px; background-color: red; border-radius: 50%;"></div>
+</body>
+
+</html>

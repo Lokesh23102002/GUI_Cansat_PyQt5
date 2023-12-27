@@ -160,9 +160,15 @@ class Ui_NEXTJS(object):
         self.actionCREATE.setText(_translate("NEXTJS", "CREATE"))
         self.graph = Graph(self.widget,self.Graphs)
         self.graph = Graph(self.widget_2,self.Graphs)
+        self.actionAbout.clicked.connect(self.open)
+    
+    def open(self):
+        fname = QFileDialog.getOpenFileName(self, 'Open file', 
+         'c:\\',"Image files (*.jpg *.gif)")
+        print(fname)
 
     def onChanged(self,text):
-        print(text)
+        pass
         
 if __name__ == "__main__":
     import sys

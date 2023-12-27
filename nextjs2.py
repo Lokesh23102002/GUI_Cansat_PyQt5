@@ -9,11 +9,10 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from AnimatedGraph import Graph,QtGraph
+from AnimatedGraph import Graph,QtGraph,qtmap
 import serial.tools.list_ports
 from PyQt5.QtCore import QThread, pyqtSignal
 import time
-
 from reciever import LiveDataReader
         
 
@@ -277,22 +276,36 @@ class Ui_NEXTJS(object):
         self.graph4 = QtGraph(self.frame_7)
         self.graph5 = QtGraph(self.frame_8)
         self.graph6 = QtGraph(self.frame_9)
+        self.map = qtmap(self.tab_3)
         self.reader = LiveDataReader('DATA.csv',"Test",9600)
         self.reader.data_updated.connect(self.printdata)
         self.reader.start()
+        self.actionAbout.triggered.connect(self.file_open)
+    
+    def file_open(self):
+        
+        fname = QtWidgets.QFileDialog.getOpenFileName(self.centralwidget, 'Open file', 
+         'D:\cansat\Test data\\',"CSV files (*.csv)")
+        print(fname)
+        if fname[0] != '':
+            self.label_3.setText(QtCore.QCoreApplication.translate("NEXTJS", fname[0]))
+
         # t = Thread(target=self.withoutth)
         # t.start()
+    
     def printdata(self,text):
-        self.graph.x_data.append(float(text[0])-1702453034.2631931)
+        self.graph.x_data.append(float(text[0]))
         self.graph.y_data.append(float(text[-5]))
-        self.graph4.x_data.append(float(text[0])-1702453034.2631931)
+        self.graph4.x_data.append(float(text[0]))
         self.graph4.y_data.append(float(text[-11]))
-        self.graph5.x_data.append(float(text[0])-1702453034.2631931)
+        self.graph5.x_data.append(float(text[0]))
         self.graph5.y_data.append(float(text[-9]))
-        self.graph6.x_data.append(float(text[0])-1702453034.2631931)
+        self.graph6.x_data.append(float(text[0]))
         self.graph6.y_data.append(float(text[-10]))
+        self.map.update_location(text[-3],text[-4])
+    
         
-        print(text)
+        # print(text)
 
 
 
@@ -304,6 +317,7 @@ if __name__ == "__main__":
     ui.setupUi(NEXTJS)
     NEXTJS.show()
     sys.exit(app.exec_())
+
 
 
 

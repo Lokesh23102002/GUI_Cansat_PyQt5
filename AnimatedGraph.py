@@ -1,13 +1,30 @@
 import sys
 import numpy as np
 from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QSlider, QLabel
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt,QObject,pyqtSlot,QUrl
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.animation import FuncAnimation
 import range_slider
 from PyQt5 import QtCore, QtGui, QtWidgets
 import pyqtgraph as pg
+import datetime
+import folium
+from PyQt5.QtWebChannel import QWebChannel
+from PyQt5.QtWebEngineWidgets import QWebEngineView
+from PyQt5.QtWebEngineWidgets import QWebEngineSettings
+
+# Reference of below time axis code:
+# https://gist.github.com/iverasp/9349dffa42aeffb32e48a0868edfa32d
+class TimeAxisItem(pg.AxisItem):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.setLabel(text='Time', units=None)
+        self.enableAutoSIPrefix(False)
+
+    def tickStrings(self, values, scale, spacing):
+        return [datetime.datetime.fromtimestamp(value).strftime("%I:%M:%S.%f")[:-4] for value in values]
+
 class Graph():
     def __init__(self,main_widget):
         layout = QVBoxLayout(main_widget)
@@ -56,7 +73,7 @@ class QtGraph():
         
         ### from here we are using pyqtgraph
         
-        self.GraphWidget = pg.PlotWidget()
+        self.GraphWidget = pg.PlotWidget(axisItems={'bottom': TimeAxisItem(orientation='bottom')})
         layout.addWidget(self.GraphWidget)
         self.GraphWidget.setBackground('w')
 
@@ -105,7 +122,90 @@ class AnimatedGraph(QMainWindow):
 
         self.graph = Graph(main_widget,self)
         
+class FoliumMap():
+    def __init__(self,main_widget):
+        layout = QVBoxLayout(main_widget)
+        self.map_view = QWebEngineView()
+        layout.addWidget(self.map_view)
+        self.latitudes = [28.04376082583056]
+        self.longitudes = [73.28773858890536]
+        self.display_map()
 
+    def display_map(self,):
+        # Create a Folium map
+        self.m = folium.Map(location=[28.04376082583056, 73.28773858890536], zoom_start=15,control_scale=True,prefer_canvas=True)
+        print(self.m._repr_html_())
+        folium.Marker(location=[28.04376082583056, 73.28773858890536], popup='Marker').add_to(self.m)
+        # Save the map as HTML
+        map_html = self.m._repr_html_()
+
+        # Load the HTML into the QWebEngineView
+        self.map_view.setHtml(map_html)
+    def update_plot(self):
+        self.latitudes.append(self.latitudes[-1]+0.0001)
+        self.longitudes.append(self.longitudes[-1]+0.0001)
+
+HTML = '''<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenStreetMap Example</title>
+    <!-- Include Leaflet from CDN without integrity attribute -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+</head>
+
+<body>
+    <div id="map" style="height: 400px;"></div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="qrc:///qtwebchannel/qwebchannel.js"></script> <!-- Include QtWebChannel.js -->
+
+    <script>
+        var updateMarker;
+        var marker;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var map = L.map('map').setView([0, 0], 2);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            marker = L.marker([0, 0]).addTo(map);
+
+            ;
+        });
+
+        updateMarker = function (lat, lon) {
+            marker.setLatLng([lat, lon]).update();
+
+        }
+    </script>
+</body>
+
+</html>'''
+
+class qtmap():
+    def __init__(self,main_widget):
+        layout = QVBoxLayout(main_widget)
+        self.webEngineView = QWebEngineView()
+        self.webEngineView.settings().setAttribute(QWebEngineSettings.LocalStorageEnabled, True)
+        local_html_url = QUrl.fromLocalFile("/asset/openstreetmap.html") 
+        # self.webEngineView.setUrl(local_html_url)
+        self.webEngineView.setHtml(HTML)
+        layout.addWidget(self.webEngineView)
+        self.lat = 28.04376082583056
+        self.long = 73.28773858890536
+
+
+    def update_location(self,lat,long):
+        self.webEngineView.page().runJavaScript("updateMarker({},{});".format(self.lat,self.long))
+        self.lat = self.lat+0.0001
+        self.long = self.long+0.0001
+        
+        
+    
 if __name__ == '__main__':
     app = QApplication(sys.argv)
 
