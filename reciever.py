@@ -26,14 +26,15 @@ class LiveDataReader(QThread):
 
     def __init__(self, csv_file,port,baud_rate):
         super().__init__()
-        self.csv_file = csv_file
+        self.csv_file = None
+        self.data_updated.connect(self.update_csv)
         self.datat = []
         if(port != "Test"):
             self.device = XBeeDevice(port,baud_rate)
             self.device.add_data_received_callback(self.recieve)
         else:
             self.device = None
-            with open(csv_file, 'r') as file:
+            with open("Data.csv", 'r') as file:
                 reader = csv.reader(file)
                 self.datat = list(reader)
             self.rowno = 2000
@@ -51,8 +52,9 @@ class LiveDataReader(QThread):
         while True:
             # data,length = self.read_csv()
             self.data_updated.emit(self.datat[self.rowno])
-            self.rowno += 1
             
+            self.rowno += 1
+
             def random_sleep():
             
                 time.sleep(0.2)  # Convert milliseconds to seconds
@@ -60,10 +62,22 @@ class LiveDataReader(QThread):
 
             random_sleep()
 
-    
+    def stop(self):
+        self.terminate()
+        self.wait()
+
+    def update_csv(self,data):
+        print(data)
+        if self.csv_file is not None:
+            with open(self.csv_file, 'a') as file:
+                writer = csv.writer(file)
+                writer.writerow(data)
+            
+       
+        
     # def read_csv(self):
     #     data = []
-    #     with open(self.csv_file, 'r') as file:
+    #     with open(self.Data.csv, 'r') as file:
     #         reader = csv.reader(file)
     #         for i,row in enumerate(reader):
     #             data.append(row)
