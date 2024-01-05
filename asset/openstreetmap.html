@@ -18,21 +18,40 @@
     <script>
         var updateMarker;
         var marker;
-
+        var trace = [];
+        var traceLayer;
+        var map;
         document.addEventListener('DOMContentLoaded', function () {
-            var map = L.map('map').setView([0, 0], 2);
+            map = L.map('map').setView([0, 0], 2);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors'
             }).addTo(map);
 
             marker = L.marker([0, 0]).addTo(map);
-
-            ;
         });
 
         updateMarker = function (lat, lon) {
-            marker.setLatLng([lat, lon]).update();
+            // Update the marker position
+            marker.setLatLng([lat, lon]);
 
+            // Add the updated position to the trace
+            trace.push([lat, lon]);
+
+            // Remove the existing trace layer and add a new one
+            if (traceLayer) {
+                map.removeLayer(traceLayer);
+            }
+
+            traceLayer = L.polyline(trace, {
+                color: 'blue'
+            });
+
+            // Add the new trace layer to the map
+            traceLayer.addTo(map);
+
+            // Update the map view to fit the updated marker and trace
+            var bounds = L.latLngBounds(trace);
+            map.fitBounds(bounds);
         }
     </script>
 </body>
