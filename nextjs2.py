@@ -9,7 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from AnimatedGraph import Graph,QtGraph,qtmap
+from AnimatedGraph import QtGraph,qtmap
 import serial.tools.list_ports
 from PyQt5.QtCore import QThread, pyqtSignal
 import time
@@ -235,14 +235,7 @@ class Ui_NEXTJS(object):
         
         
 
-    
-    def detect_serial_ports(self):
-        ports = serial.tools.list_ports.comports()
-        port_list = [port.device for port in ports]
-        return port_list+['Test']
-    def withoutth(self):
-        while True:
-            print("hello")
+   
             
 
     def retranslateUi(self, NEXTJS):
@@ -270,18 +263,43 @@ class Ui_NEXTJS(object):
         self.menuAbout.setTitle(_translate("NEXTJS", "About"))
         self.actionAbout.setText(_translate("NEXTJS", "Open"))
         self.actionCREATE.setText(_translate("NEXTJS", "CREATE"))
+
+
+        # custom code not generate by the qt designer
         self.graph = QtGraph(self.tab_2)
         self.graph2 = QtGraph(self.page_5)
         self.graph3 = QtGraph(self.page_4)
         self.graph4 = QtGraph(self.frame_7)
         self.graph5 = QtGraph(self.frame_8)
         self.graph6 = QtGraph(self.frame_9)
+        self.pushButton_2.setEnabled(False)
         self.map = qtmap(self.tab_3)
         self.reader = LiveDataReader('DATA.csv',"Test",9600)
         self.reader.data_updated.connect(self.printdata)
-        self.reader.start()
         self.actionAbout.triggered.connect(self.file_open)
+        self.pushButton.clicked.connect(self.connect)
+        self.pushButton_2.clicked.connect(self.disconnect)
     
+    # It starts the data recieving
+    def connect(self):
+        ## connect to the xbee
+        # port = self.comboBox.currentText()
+        # baud_rate = self.spinBox.value()
+        # self.reader.connect(port,baud_rate)
+        # self.reader.start()
+        self.reader.start()
+        self.pushButton.setEnabled(False)
+        self.pushButton.setText("Connected")
+        self.pushButton_2.setEnabled(True)
+
+    # It stops the data recieving
+    def disconnect(self):
+        self.reader.terminate()
+        self.pushButton.setEnabled(True)
+        self.pushButton.setText("Connect")
+        self.pushButton_2.setEnabled(False)
+    
+    # It opens the file in which recieved data is saved
     def file_open(self):
         
         fname = QtWidgets.QFileDialog.getOpenFileName(self.centralwidget, 'Open file', 
@@ -289,10 +307,10 @@ class Ui_NEXTJS(object):
         print(fname)
         if fname[0] != '':
             self.label_3.setText(QtCore.QCoreApplication.translate("NEXTJS", fname[0]))
+            self.reader.csv_file = fname[0]
 
-        # t = Thread(target=self.withoutth)
-        # t.start()
     
+    # update the data to the GUI
     def printdata(self,text):
         self.graph.x_data.append(float(text[0]))
         self.graph.y_data.append(float(text[-5]))
@@ -305,8 +323,16 @@ class Ui_NEXTJS(object):
         self.map.update_location(text[-3],text[-4])
     
         
-        # print(text)
 
+    # It detects the available serial ports
+    def detect_serial_ports(self):
+        ports = serial.tools.list_ports.comports()
+        port_list = [port.device for port in ports]
+        return port_list+['Test']
+
+    def withoutth(self):
+        while True:
+            print("hello")
 
 
 if __name__ == "__main__":
