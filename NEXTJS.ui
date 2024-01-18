@@ -321,20 +321,20 @@
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_2">
              <item>
-              <widget class="QTabWidget" name="tabWidget">
+              <widget class="QTabWidget" name="tab">
                <property name="enabled">
                 <bool>true</bool>
                </property>
                <property name="currentIndex">
-                <number>0</number>
+                <number>1</number>
                </property>
-               <widget class="QWidget" name="tab">
+               <widget class="QWidget" name="Acceleration">
                 <attribute name="title">
                  <string>Acceleration</string>
                 </attribute>
                 <layout class="QHBoxLayout" name="horizontalLayout_7">
                  <item>
-                  <widget class="QToolBox" name="toolBox">
+                  <widget class="QToolBox" name="allacc">
                    <property name="currentIndex">
                     <number>0</number>
                    </property>
@@ -352,7 +352,7 @@
                     </attribute>
                     <layout class="QHBoxLayout" name="horizontalLayout_8">
                      <item>
-                      <widget class="QFrame" name="frame_7">
+                      <widget class="QFrame" name="accx">
                        <property name="styleSheet">
                         <string notr="true"/>
                        </property>
@@ -365,7 +365,7 @@
                       </widget>
                      </item>
                      <item>
-                      <widget class="QFrame" name="frame_9">
+                      <widget class="QFrame" name="accy">
                        <property name="frameShape">
                         <enum>QFrame::StyledPanel</enum>
                        </property>
@@ -375,7 +375,7 @@
                       </widget>
                      </item>
                      <item>
-                      <widget class="QFrame" name="frame_8">
+                      <widget class="QFrame" name="accz">
                        <property name="frameShape">
                         <enum>QFrame::StyledPanel</enum>
                        </property>
@@ -386,7 +386,7 @@
                      </item>
                     </layout>
                    </widget>
-                   <widget class="QWidget" name="page_5">
+                   <widget class="QWidget" name="acc_x">
                     <property name="geometry">
                      <rect>
                       <x>0</x>
@@ -399,7 +399,7 @@
                      <string>Acceleration X</string>
                     </attribute>
                    </widget>
-                   <widget class="QWidget" name="page_4">
+                   <widget class="QWidget" name="acc_y">
                     <property name="geometry">
                      <rect>
                       <x>0</x>
@@ -412,26 +412,7 @@
                      <string>Acceleration Y</string>
                     </attribute>
                    </widget>
-                   <widget class="QWidget" name="page">
-                    <attribute name="label">
-                     <string>Acceleration Z</string>
-                    </attribute>
-                   </widget>
-                  </widget>
-                 </item>
-                </layout>
-               </widget>
-               <widget class="QWidget" name="tab_2">
-                <attribute name="title">
-                 <string>Attitude</string>
-                </attribute>
-                <layout class="QHBoxLayout" name="horizontalLayout_10">
-                 <item>
-                  <widget class="QToolBox" name="toolBox_2">
-                   <property name="currentIndex">
-                    <number>3</number>
-                   </property>
-                   <widget class="QWidget" name="page_6">
+                   <widget class="QWidget" name="acc_z">
                     <property name="geometry">
                      <rect>
                       <x>0</x>
@@ -441,11 +422,38 @@
                      </rect>
                     </property>
                     <attribute name="label">
-                     <string>All acceleration</string>
+                     <string>Acceleration Z</string>
+                    </attribute>
+                   </widget>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+               <widget class="QWidget" name="Attitude">
+                <attribute name="title">
+                 <string>Attitude</string>
+                </attribute>
+                <layout class="QHBoxLayout" name="horizontalLayout_10">
+                 <item>
+                  <widget class="QToolBox" name="allatt_2">
+                   <property name="currentIndex">
+                    <number>0</number>
+                   </property>
+                   <widget class="QWidget" name="alltt">
+                    <property name="geometry">
+                     <rect>
+                      <x>0</x>
+                      <y>0</y>
+                      <width>683</width>
+                      <height>314</height>
+                     </rect>
+                    </property>
+                    <attribute name="label">
+                     <string>All attitude</string>
                     </attribute>
                     <layout class="QHBoxLayout" name="horizontalLayout_9">
                      <item>
-                      <widget class="QFrame" name="frame_10">
+                      <widget class="QFrame" name="attx">
                        <property name="frameShape">
                         <enum>QFrame::StyledPanel</enum>
                        </property>
@@ -455,7 +463,7 @@
                       </widget>
                      </item>
                      <item>
-                      <widget class="QFrame" name="frame_11">
+                      <widget class="QFrame" name="atty">
                        <property name="frameShape">
                         <enum>QFrame::StyledPanel</enum>
                        </property>
@@ -465,7 +473,7 @@
                       </widget>
                      </item>
                      <item>
-                      <widget class="QFrame" name="frame_12">
+                      <widget class="QFrame" name="attz">
                        <property name="frameShape">
                         <enum>QFrame::StyledPanel</enum>
                        </property>
@@ -476,7 +484,7 @@
                      </item>
                     </layout>
                    </widget>
-                   <widget class="QWidget" name="page_7">
+                   <widget class="QWidget" name="roll">
                     <property name="geometry">
                      <rect>
                       <x>0</x>
@@ -489,7 +497,7 @@
                      <string>Roll</string>
                     </attribute>
                    </widget>
-                   <widget class="QWidget" name="page_8">
+                   <widget class="QWidget" name="yaw">
                     <property name="geometry">
                      <rect>
                       <x>0</x>
@@ -502,7 +510,7 @@
                      <string>Yaw</string>
                     </attribute>
                    </widget>
-                   <widget class="QWidget" name="page_2">
+                   <widget class="QWidget" name="pitch">
                     <property name="geometry">
                      <rect>
                       <x>0</x>
@@ -519,7 +527,7 @@
                  </item>
                 </layout>
                </widget>
-               <widget class="QWidget" name="tab_3">
+               <widget class="QWidget" name="Altitude">
                 <attribute name="title">
                  <string>Altitude</string>
                 </attribute>
@@ -527,7 +535,7 @@
                  <item>
                   <widget class="QToolBox" name="toolBox_3">
                    <property name="currentIndex">
-                    <number>3</number>
+                    <number>0</number>
                    </property>
                    <widget class="QWidget" name="page_9">
                     <property name="geometry">
@@ -543,7 +551,7 @@
                     </attribute>
                     <layout class="QHBoxLayout" name="horizontalLayout_11">
                      <item>
-                      <widget class="QFrame" name="frame_13">
+                      <widget class="QFrame" name="faltitude">
                        <property name="frameShape">
                         <enum>QFrame::StyledPanel</enum>
                        </property>
@@ -553,7 +561,7 @@
                       </widget>
                      </item>
                      <item>
-                      <widget class="QFrame" name="frame_14">
+                      <widget class="QFrame" name="ftemp">
                        <property name="frameShape">
                         <enum>QFrame::StyledPanel</enum>
                        </property>
@@ -563,7 +571,7 @@
                       </widget>
                      </item>
                      <item>
-                      <widget class="QFrame" name="frame_15">
+                      <widget class="QFrame" name="fpress">
                        <property name="frameShape">
                         <enum>QFrame::StyledPanel</enum>
                        </property>
@@ -574,7 +582,7 @@
                      </item>
                     </layout>
                    </widget>
-                   <widget class="QWidget" name="page_10">
+                   <widget class="QWidget" name="altitude">
                     <property name="geometry">
                      <rect>
                       <x>0</x>
@@ -587,7 +595,7 @@
                      <string>Altitude</string>
                     </attribute>
                    </widget>
-                   <widget class="QWidget" name="page_11">
+                   <widget class="QWidget" name="temp">
                     <property name="geometry">
                      <rect>
                       <x>0</x>
@@ -600,7 +608,7 @@
                      <string>Temperature</string>
                     </attribute>
                    </widget>
-                   <widget class="QWidget" name="page_12">
+                   <widget class="QWidget" name="press">
                     <property name="geometry">
                      <rect>
                       <x>0</x>
@@ -617,13 +625,18 @@
                  </item>
                 </layout>
                </widget>
-               <widget class="QWidget" name="tab_4">
+               <widget class="QWidget" name="Map">
                 <attribute name="title">
-                 <string>Page</string>
+                 <string>Map</string>
+                </attribute>
+               </widget>
+               <widget class="QWidget" name="Orientation">
+                <attribute name="title">
+                 <string>3D_orientation</string>
                 </attribute>
                 <layout class="QGridLayout" name="gridLayout_2">
                  <item row="0" column="0">
-                  <widget class="QTableWidget" name="tableWidget"/>
+                  <widget class="QOpenGLWidget" name="openGLWidget"/>
                  </item>
                 </layout>
                </widget>

@@ -33,7 +33,7 @@ class LiveDataReader(QThread):
             self.device = XBeeDevice(port,baud_rate)
             self.device.add_data_received_callback(self.recieve)
         else:
-            self.device = None
+            self.device = "Test"
             with open("Data.csv", 'r') as file:
                 reader = csv.reader(file)
                 self.datat = list(reader)
@@ -43,10 +43,11 @@ class LiveDataReader(QThread):
 
     def connect(self,port,baud_rate):
         self.device = XBeeDevice(port,baud_rate)
+        self.device.open()
         self.device.add_data_received_callback(self.recieve)
         
     def recieve(self,xbee_message):
-        self.data_updated.emit(xbee_message.data.decode("utf8"))
+        self.data_updated.emit(xbee_message.data.decode("utf8").split(","))
 
     def run(self):
         while True:
@@ -67,7 +68,6 @@ class LiveDataReader(QThread):
         self.wait()
 
     def update_csv(self,data):
-        print(data)
         if self.csv_file is not None:
             with open(self.csv_file, 'a') as file:
                 writer = csv.writer(file)

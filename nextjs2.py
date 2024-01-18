@@ -14,8 +14,29 @@ import serial.tools.list_ports
 from PyQt5.QtCore import QThread, pyqtSignal
 import time
 from reciever import LiveDataReader
-        
 
+# class port_reader(QThread):
+#     def __init__(self, port, baud_rate):
+#         super().__init__()
+#         self.port = port
+#         self.baud_rate = baud_rate
+#         self.ser = serial.Serial(self.port,self.baud_rate)
+#         self.ser.flushInput()
+#         self.ser.flushOutput()
+#         self.running = True
+
+#     def terminate(self):
+#         self.running = False
+
+#     def run(self):
+#         while self.running:
+#             try:
+#                 self.ser_bytes = self.ser.readline()
+#                 self.decoded_bytes = float(self.ser_bytes[0:len(self.ser_bytes)-2].decode("utf-8"))
+#                 print(self.decoded_bytes)
+#             except:
+#                 print("Keyboard Interrupt")
+#                 break   
 class Ui_NEXTJS(object):
     def setupUi(self, NEXTJS):
         NEXTJS.setObjectName("NEXTJS")
@@ -243,6 +264,7 @@ class Ui_NEXTJS(object):
         NEXTJS.setWindowTitle(_translate("NEXTJS", "NEXTJS"))
         self.Xbee_controll.setTitle(_translate("NEXTJS", "Xbee controller and opened file"))
         self.label.setText(_translate("NEXTJS", "PORT :- "))
+        #Updating comboBox with available serial ports
         for i,port in enumerate(self.detect_serial_ports()):
             self.comboBox.addItem(port)
         self.label_2.setText(_translate("NEXTJS", "BAUD RATE :- "))
@@ -258,7 +280,7 @@ class Ui_NEXTJS(object):
         self.toolBox.setItemText(self.toolBox.indexOf(self.page), _translate("NEXTJS", "Acceleration Z"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("NEXTJS", "Acceleration"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("NEXTJS", "Altitude"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("NEXTJS", "Gyroscope"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("NEXTJS", "Map"))
         self.menuFile.setTitle(_translate("NEXTJS", "File"))
         self.menuAbout.setTitle(_translate("NEXTJS", "About"))
         self.actionAbout.setText(_translate("NEXTJS", "Open"))
@@ -272,7 +294,7 @@ class Ui_NEXTJS(object):
         self.graph4 = QtGraph(self.frame_7)
         self.graph5 = QtGraph(self.frame_8)
         self.graph6 = QtGraph(self.frame_9)
-        self.pushButton_2.setEnabled(False)
+       
         self.map = qtmap(self.tab_3)
         self.reader = LiveDataReader('DATA.csv',"Test",9600)
         self.reader.data_updated.connect(self.printdata)
@@ -312,14 +334,10 @@ class Ui_NEXTJS(object):
     
     # update the data to the GUI
     def printdata(self,text):
-        self.graph.x_data.append(float(text[0]))
-        self.graph.y_data.append(float(text[-5]))
-        self.graph4.x_data.append(float(text[0]))
-        self.graph4.y_data.append(float(text[-11]))
-        self.graph5.x_data.append(float(text[0]))
-        self.graph5.y_data.append(float(text[-9]))
-        self.graph6.x_data.append(float(text[0]))
-        self.graph6.y_data.append(float(text[-10]))
+        self.graph.update_plot(float(text[0]),float(text[-5]))
+        self.graph4.update_plot(float(text[0]),float(text[-11]))
+        self.graph5.update_plot(float(text[0]),float(text[-9]))
+        self.graph6.update_plot(float(text[0]),float(text[-10]))
         self.map.update_location(text[-3],text[-4])
     
         
@@ -330,9 +348,6 @@ class Ui_NEXTJS(object):
         port_list = [port.device for port in ports]
         return port_list+['Test']
 
-    def withoutth(self):
-        while True:
-            print("hello")
 
 
 if __name__ == "__main__":
