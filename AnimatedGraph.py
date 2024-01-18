@@ -52,7 +52,7 @@ class QtGraph():
         self.slider.setMinimum(1)
         self.slider.setMaximum(100)
         self.slider.setLow(15)
-        self.slider.setHigh(35)
+        self.slider.setHigh(100)
         self.slider.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.slider.sliderMoved.connect(self.update_x_range)
         layout.addWidget(self.slider)
