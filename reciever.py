@@ -47,6 +47,7 @@ class LiveDataReader(QThread):
         self.device.add_data_received_callback(self.recieve)
         
     def recieve(self,xbee_message):
+        
         self.data_updated.emit(xbee_message.data.decode("utf8").split(","))
 
     def run(self):

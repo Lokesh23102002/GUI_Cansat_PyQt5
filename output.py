@@ -358,6 +358,8 @@ class Ui_NEXTJS(object):
         self.actionCREATE.setText(_translate("NEXTJS", "CREATE"))
 
         #Updating comboBox with available serial ports
+        
+
         for i,port in enumerate(self.detect_serial_ports()):
             self.comboBox.addItem(port)
 
@@ -442,7 +444,12 @@ class Ui_NEXTJS(object):
         if fname[0] != '':
             self.label_3.setText(QtCore.QCoreApplication.translate("NEXTJS", fname[0]))
             self.reader.csv_file = fname[0]
-
+    
+    
+    def lowpassfilter(self,old,new):
+            if len(old) == 0:
+                return new
+            return old[-1]*0.95+new*0.05
     # It updates the data in the graphs
     def printdata(self,text):
         if self.reader.device != "Test":
@@ -451,28 +458,30 @@ class Ui_NEXTJS(object):
             text[0] = text[-2]
         for i in range(len(text)-2):
             text[i] = float(text[i])
-        self.fgaccx.update_plot(text[0],text[-11])
-        self.fgaccy.update_plot(text[0],text[-10])
-        self.fgaccz.update_plot(text[0],text[-9])
+        
+        self.fgaccx.update_plot(text[0],self.lowpassfilter(self.fgaccx.y_data,text[-11]))
+        self.fgaccy.update_plot(text[0],self.lowpassfilter(self.fgaccy.y_data,text[-10]))
+        self.fgaccz.update_plot(text[0],self.lowpassfilter(self.fgaccz.y_data,text[-9]))
+        # self.fgattx.update_plot(text[0],self.lowpassfilter(self.fgattx.y_data,text[15]))
         self.fgattx.update_plot(text[0],text[15])
-        self.fgatty.update_plot(text[0],text[16])
-        self.fgattz.update_plot(text[0],text[17])
-        self.fgalt.update_plot(text[0],text[-5])
-        self.fgtemp.update_plot(text[0],text[-4])
-        self.fgpress.update_plot(text[0],text[-3])
-        self.gaccx.update_plot(text[0],text[-11])
-        self.gaccy.update_plot(text[0],text[-10])
-        self.gaccz.update_plot(text[0],text[-9])
-        self.groll.update_plot(text[0],text[15])
-        self.gyaw.update_plot(text[0],text[16])
-        self.gpitch.update_plot(text[0],text[17])
-        self.galt.update_plot(text[0],text[-5])
-        self.gtemp.update_plot(text[0],text[-4])
-        self.gpress.update_plot(text[0],text[-3])
+        self.fgatty.update_plot(text[0],self.lowpassfilter(self.fgaccy.y_data,text[16]))
+        self.fgattz.update_plot(text[0],self.lowpassfilter(self.fgaccz.y_data,text[17]))
+        self.fgalt.update_plot(text[0],self.lowpassfilter(self.fgalt.y_data,text[-5]))
+        self.fgtemp.update_plot(text[0],self.lowpassfilter(self.fgtemp.y_data,text[-4]))
+        self.fgpress.update_plot(text[0],self.lowpassfilter(self.fgpress.y_data,text[-3]))
+        self.gaccx.update_plot(text[0],self.lowpassfilter(self.gaccx.y_data,text[-11]))
+        self.gaccy.update_plot(text[0],self.lowpassfilter(self.gaccy.y_data,text[-10]))
+        self.gaccz.update_plot(text[0],self.lowpassfilter(self.gaccz.y_data,text[-9]))
+        self.groll.update_plot(text[0],self.lowpassfilter(self.groll.y_data,text[15]))
+        self.gyaw.update_plot(text[0],self.lowpassfilter(self.gyaw.y_data,text[16]))
+        self.gpitch.update_plot(text[0],self.lowpassfilter(self.gpitch.y_data,text[17]))
+        self.galt.update_plot(text[0],self.lowpassfilter(self.galt.y_data,text[-5]))
+        self.gtemp.update_plot(text[0],self.lowpassfilter(self.gtemp.y_data,text[-4]))
+        self.gpress.update_plot(text[0],self.lowpassfilter(self.gpress.y_data,text[-3]))
         self.map.update_location(text[0],text[-4])
         self.openGLWidget.x = text[10]
         self.openGLWidget.y = text[11]
-        self.openGLWidget.z = text[9]
+        self.openGLWidget.z = -text[9]
         print(text)
     
     # It detects the available serial ports

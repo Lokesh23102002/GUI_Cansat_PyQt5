@@ -50,3 +50,6 @@ designer - Shortcut.lnk
 
 *__pycache__
 *.vs
+
+# Zip files
+
